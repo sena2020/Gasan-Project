@@ -1,12 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" id="WebApp_ID" version="3.1">
-  <display-name>Gasan</display-name>
-  <welcome-file-list>
-    <welcome-file>index.html</welcome-file>
-    <welcome-file>index.htm</welcome-file>
-    <welcome-file>index.jsp</welcome-file>
-    <welcome-file>default.html</welcome-file>
-    <welcome-file>default.htm</welcome-file>
-    <welcome-file>default.jsp</welcome-file>
-  </welcome-file-list>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+	id="WebApp_ID" version="3.1">
+
+
+	<display-name>Gasan</display-name>
+	
+	<listener>
+		<listener-class>jdbc.DBCPInitListener</listener-class>
+	</listener>
+	<context-param>
+		<param-name>poolConfigFile</param-name>
+		<param-value>/WEB-INF/dbConfig/db.properties</param-value>
+	</context-param>
+	
+	<!-- character Encoding 하는 필터 -->
+	<filter>
+		<filter-name>encodingFilter</filter-name>
+		<filter-class>filter.CharacterEncodingFilter</filter-class>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+	<filter>
+		<filter-name>loginCheckFilter</filter-name>
+		<filter-class>filter.LoginCheckFilter</filter-class>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>loginCheckFilter</filter-name>
+		<url-pattern>/logout</url-pattern>
+		<url-pattern>/enrollApply</url-pattern>
+		<url-pattern>/modifyApply</url-pattern>
+		<url-pattern>/deleteApply</url-pattern>
+		<url-pattern>/commentEnroll</url-pattern>
+		<url-pattern>/commentDelete</url-pattern>
+	</filter-mapping>
+
+	<filter>
+		<filter-name>NotLoginCheckFilter</filter-name>
+		<filter-class>filter.NotLoginCheckFilter</filter-class>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>NotLoginCheckFilter</filter-name>
+		<url-pattern>/enroll</url-pattern>
+		<url-pattern>/login</url-pattern>
+	</filter-mapping>
+	
+	<servlet>
+		<servlet-name>Controller</servlet-name>
+		<servlet-class>controller.MainController</servlet-class>
+		<init-param>
+			<param-name>handlerConfigFile</param-name>
+			<param-value>/WEB-INF/handlerConfig/commandHandler.properties</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Controller</servlet-name>
+		<url-pattern>/enroll</url-pattern>
+		<url-pattern>/login</url-pattern>
+		<url-pattern>/logout</url-pattern>
+		<url-pattern>/deleteUser</url-pattern>
+		<url-pattern>/enrollApply</url-pattern>
+		<url-pattern>/modifyApply</url-pattern>
+		<url-pattern>/deleteApply</url-pattern>
+		<url-pattern>/listApply</url-pattern>
+		<url-pattern>/readApply</url-pattern>
+		<url-pattern>/foodList</url-pattern>
+		<url-pattern>/foodView</url-pattern>
+		<url-pattern>/commentEnroll</url-pattern>
+		<url-pattern>/commentDelete</url-pattern>
+	</servlet-mapping>
 </web-app>
